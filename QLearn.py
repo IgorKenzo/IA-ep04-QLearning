@@ -15,7 +15,7 @@ class Direcoes(Enum):
 
 class QLearn():
 
-    MAXGEN = 2000
+    MAXGEN = 1000
 
     def __init__(self, alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards):
         self.alfa = alfa
@@ -31,7 +31,7 @@ class QLearn():
             [b, b, b, b, b, b, c, c, b, c],
             [c, p, p, c, b, p, b, b, b, b],
             [b, b, b, c, b, b, c, c, c, b],
-            [b, c, c, c, p, c, c, c, p, b],
+            [b, c, c, c, p, b, c, c, p, b],
             [b, b, b, p, c, b, p, b, b, b],
             [c, p, b, b, b, b, b, b, b, c],
             [p, c, b, c, c, t, b, c, b, p],
@@ -112,8 +112,7 @@ class QLearn():
             
             state = f"{randomPosAgent[0]}{randomPosAgent[1]}"
             
-            #while(self.config[int(state[0])][int(state[1])] != c and self.config[int(state[0])][int(state[1])] != p and self.config[int(state[0])][int(state[1])] != t):
-            for asd in range(200):
+            for _ in range(200):
                 self.QState[f"{state}{ Direcoes.Cima.value}"] = self.Q(state, Direcoes.Cima)
                 self.QState[f"{state}{ Direcoes.Direita.value}"] = self.Q(state, Direcoes.Direita)
                 self.QState[f"{state}{ Direcoes.Baixo.value}"] = self.Q(state, Direcoes.Baixo)
@@ -130,7 +129,7 @@ class QLearn():
                 else: 
                     action = Direcoes(np.argmax(possibleActions))
 
-                state, symbol = self.checkFuturePosition(state, action)
+                state, _ = self.checkFuturePosition(state, action)
 
                 self.previousQState = self.QState.copy()
 
