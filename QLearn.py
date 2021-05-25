@@ -1,6 +1,8 @@
 from random import choice, random
 from enum import Enum
 import numpy as np
+import pickle
+
 c = 'c'
 b = 'b'
 p = 'p'
@@ -13,9 +15,22 @@ class Direcoes(Enum):
     Baixo = 2
     Esquerda = 3
 
+directionsIcons = ['↑','→','↓','←']
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class QLearn():
 
-    MAXGEN = 1000
+    MAXGEN = 2000
 
     def __init__(self, alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards):
         self.alfa = alfa
@@ -136,50 +151,49 @@ class QLearn():
             self.epsilon *= self.epsilonDecay
             self.epsilon = max(self.epsilon, self.epsilonMin)
 
-    def train2(self):
-        self.initializeQStates()
+        #Salvar os QStates
+        f = open("qstates.pkl","wb")
+        pickle.dump(self.QState, f)
+        f.close()
 
-        for gen in range(self.MAXGEN):
-            if gen % 100 == 0: print(f"Geração {gen}")
-            allBlankPos = self.getAllBlankPositions()
-            #while(self.config[int(state[0])][int(state[1])] != c and self.config[int(state[0])][int(state[1])] != p and self.config[int(state[0])][int(state[1])] != t):
-            for pos in allBlankPos:
-                
-                state = f"{pos[0]}{pos[1]}"
-
-                self.QState[f"{state}{ Direcoes.Cima.value}"] = self.Q(state, Direcoes.Cima)
-                self.QState[f"{state}{ Direcoes.Direita.value}"] = self.Q(state, Direcoes.Direita)
-                self.QState[f"{state}{ Direcoes.Baixo.value}"] = self.Q(state, Direcoes.Baixo)
-                self.QState[f"{state}{ Direcoes.Esquerda.value}"] = self.Q(state, Direcoes.Esquerda)
-                
-                # possibleActions =  [ self.QState[f"{state}{ Direcoes.Cima.value}"] ,
-                #                     self.QState[f"{state}{ Direcoes.Direita.value}"] ,
-                #                     self.QState[f"{state}{ Direcoes.Baixo.value}"] ,
-                #                     self.QState[f"{state}{ Direcoes.Esquerda.value}"] ]
-
-                # action = None
-                # if random() < self.epsilon:
-                #     action = choice(list(Direcoes))
-                # else: 
-                #     action = Direcoes(np.argmax(possibleActions))
-
-                # state, symbol = self.checkFuturePosition(state, action)
-
-                self.previousQState = self.QState.copy()
-
-            self.epsilon *= self.epsilonDecay
-            self.epsilon = max(self.epsilon, self.epsilonMin)
+    def printMatrix(self, matrix):
+        for i in range(10):
+            print(" | ".join(matrix[i]))
 
     def giveDirectionsFromPosition(self, i , j):
+        starterI = i
+        starterJ = j
         state = f"{i}{j}"
-
+        path = []
         
+        print("Direções escolhidas:")
         while (self.config[i][j] != t):
             possibleActions =  [ self.QState[f"{state}{ Direcoes.Cima.value}"] ,
                                 self.QState[f"{state}{ Direcoes.Direita.value}"] ,
                                 self.QState[f"{state}{ Direcoes.Baixo.value}"] ,
                                 self.QState[f"{state}{ Direcoes.Esquerda.value}"] ]
             action = Direcoes(np.argmax(possibleActions))
-            print(action, possibleActions[action.value])
+            print(f"Direção: {bcolors.FAIL}{directionsIcons[action.value]}{bcolors.ENDC}", f"QValue {possibleActions[action.value]}")
             state, _ = self.checkFuturePosition(state, action)
             i, j = int(state[0]), int(state[1])
+            path.append((i,j))
+        print()
+        self.printPath(starterI, starterJ, path)
+
+    def printPath(self, i, j, path):
+            matrix = self.config.copy()
+            for x in range(10):
+                for y in range(10):
+                    if matrix[x][y] == "b":
+                        matrix[x][y] = " "
+                    else:
+                        matrix[x][y] = f"{bcolors.OKCYAN}{matrix[x][y]}{bcolors.ENDC}"
+
+            matrix[i][j] = f"{bcolors.WARNING}A{bcolors.ENDC}"
+
+            for position in path:
+                matrix[position[0]][position[1]] = f"{bcolors.FAIL}.{bcolors.ENDC}"
+
+            matrix[path[-1][0]][path[-1][1]] = f"{bcolors.OKGREEN}T{bcolors.ENDC}"
+            
+            self.printMatrix(matrix)

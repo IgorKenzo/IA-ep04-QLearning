@@ -1,7 +1,7 @@
 
 # Hiperparametros
-
-from QLearn import Direcoes, QLearn
+from QLearn import QLearn
+from menu import Menu
 
 alfa = 0.2
 gama = 0.8
@@ -23,10 +23,9 @@ rewards = {
     t : 500
 }
 
-a = QLearn(alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards)
-# a.initializeQStates()
-# print(a.previousQState)
+menu = Menu(QLearn(alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards))
 
-a.train()
-
-a.giveDirectionsFromPosition(0, 4)
+menu.start()
+#a.train()
+#a.printBestDirections()
+#a.giveDirectionsFromPosition(0, 4)
