@@ -29,22 +29,19 @@ class Menu():
         self.agent.giveDirectionsFromPosition(x, y)
 
     def start(self):
-        while True:
-            print()
-            print("Digite uma opção:")
-            res = int(input("1 - Treinar o Modelo \n2 - Digitar a posição do carro\n3 - Sair\n"))
+        print()
+        print("Digite uma opção:")
+        res = int(input("1 - Treinar o Modelo \n2 - Digitar a posição do carro\n"))
 
-            if res == 1 :
-                print("Iniciando treinamento...")
+        if res == 1 :
+            print("Iniciando treinamento...")
+            self.agent.train()
+        
+        elif res == 2:
+            if self.checkIfTrained():
+                
+                self.loadQStates()
+                self.getCarPos()        
+            else:
+                print("Modelo não treinado ainda. Iniciando treinamento...")
                 self.agent.train()
-            
-            elif res == 2:
-                if self.checkIfTrained():
-                    
-                    self.loadQStates()
-                    self.getCarPos()        
-                else:
-                    print("Modelo não treinado ainda. Iniciando treinamento...")
-                    self.agent.train()
-            elif res == 3:
-                break
