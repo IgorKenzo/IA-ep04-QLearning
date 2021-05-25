@@ -23,7 +23,20 @@ rewards = {
     t : 500
 }
 
-menu = Menu(QLearn(alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards))
+config =[
+    [b, c, c, c, b, c, b, b, c, b],
+    [b, p, b, b, b, b, b, p, b, p],
+    [b, c, c, b, c, c, b, b, b, c],
+    [b, b, b, b, b, b, c, c, b, c],
+    [c, p, p, c, b, p, b, b, b, b],
+    [b, b, b, c, b, b, c, c, c, b],
+    [b, c, c, c, p, b, c, c, p, b],
+    [b, b, b, p, c, b, p, b, b, b],
+    [c, p, b, b, b, b, b, b, b, c],
+    [p, c, b, c, c, t, b, c, b, p],
+]
+
+menu = Menu(QLearn(alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards, config))
 
 menu.start()
 #a.train()

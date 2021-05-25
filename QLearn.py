@@ -32,25 +32,26 @@ class QLearn():
 
     MAXGEN = 2000
 
-    def __init__(self, alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards):
+    def __init__(self, alfa, gama, epsilon, epsilonDecay, epsilonMin, rewards, config):
         self.alfa = alfa
         self.gama = gama
         self.epsilon = epsilon
         self.epsilonDecay = epsilonDecay
         self.epsilonMin = epsilonMin
         self.rewards = rewards
-        self.config = [
-            [b, c, c, c, b, c, b, b, c, b],
-            [b, p, b, b, b, b, b, p, b, p],
-            [b, c, c, b, c, c, b, b, b, c],
-            [b, b, b, b, b, b, c, c, b, c],
-            [c, p, p, c, b, p, b, b, b, b],
-            [b, b, b, c, b, b, c, c, c, b],
-            [b, c, c, c, p, b, c, c, p, b],
-            [b, b, b, p, c, b, p, b, b, b],
-            [c, p, b, b, b, b, b, b, b, c],
-            [p, c, b, c, c, t, b, c, b, p],
-        ]
+        # self.config = [
+        #     [b, c, c, c, b, c, b, b, c, b],
+        #     [b, p, b, b, b, b, b, p, b, p],
+        #     [b, c, c, b, c, c, b, b, b, c],
+        #     [b, b, b, b, b, b, c, c, b, c],
+        #     [c, p, p, c, b, p, b, b, b, b],
+        #     [b, b, b, c, b, b, c, c, c, b],
+        #     [b, c, c, c, p, b, c, c, p, b],
+        #     [b, b, b, p, c, b, p, b, b, b],
+        #     [c, p, b, b, b, b, b, b, b, c],
+        #     [p, c, b, c, c, t, b, c, b, p],
+        # ]
+        self.config = config
         #self.currentState = []
         self.previousQState = {}
         self.QState = {}
